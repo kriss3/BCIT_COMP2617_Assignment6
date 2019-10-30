@@ -120,6 +120,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Assign6.cpp" />
+    <ClCompile Include="TurtleGraphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TurtleGraphics.h" />

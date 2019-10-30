@@ -18,6 +18,9 @@
     <ClCompile Include="Assign6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TurtleGraphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TurtleGraphics.h">
