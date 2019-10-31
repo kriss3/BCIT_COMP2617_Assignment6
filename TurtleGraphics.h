@@ -28,6 +28,12 @@ private:
 	                            // program starts
                                 // false means pen up, true means pen down
 
+	int penState = 1; // pen is in up position by default;
+	int currentDirection = 0;
+	
+	int xAxis = 0;
+	int yAxis = 0;
+
 	void displayFloor() const;  // will display floor on the screen
 
 	bool m_Floor [NROWS][NCOLS];   // floor on which turtle will draw
