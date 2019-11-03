@@ -31,8 +31,8 @@ private:
 	bool currentPenState = STARTING_ROW; // pen is in up position by default;
 	Directions currentDirection = STARTING_DIRECTION; //initial direction SOUTH;
 	
-	int xAxis = STARTING_ROW; //initial xAxis position x=0;
-	int yAxis = STARTING_COL; // initial yAxis position y=0;
+	int row = STARTING_ROW; //initial xAxis position x=0;
+	int col = STARTING_COL; // initial yAxis position y=0;
 	bool m_Floor [NROWS][NCOLS];   // floor on which turtle will draw
 
 public:
@@ -41,9 +41,9 @@ public:
 	void processTurtleMoves( const int commands[]);  // will process
 	                   // the commands contained in array "commands"	
 	void displayFloor() const;  // will display floor on the screen
-	int move(int valueToMoveBy, Directions dir, bool currentPenState, bool theGrid[][NCOLS], int comdsArr[], int comdsSize);
-	void turnLeft(Directions dir);
-	void turnRight(Directions dir);
+	int move(int valueToMoveBy, Directions *dir, bool currentPenState, bool theGrid[][NCOLS], int comdsArr[], int comdsSize);
+	void turnLeft(Directions *dir);
+	void turnRight(Directions *dir);
 };
 
 
