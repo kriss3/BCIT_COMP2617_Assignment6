@@ -28,14 +28,11 @@ private:
 	                            // program starts
                                 // false means pen up, true means pen down
 
-	int penState = 1; // pen is in up position by default;
-	int currentDirection = 0;
+	bool currentPenState = STARTING_ROW; // pen is in up position by default;
+	Directions currentDirection = STARTING_DIRECTION; //initial direction SOUTH;
 	
-	int xAxis = 0;
-	int yAxis = 0;
-
-	void displayFloor() const;  // will display floor on the screen
-
+	int xAxis = STARTING_ROW; //initial xAxis position x=0;
+	int yAxis = STARTING_COL; // initial yAxis position y=0;
 	bool m_Floor [NROWS][NCOLS];   // floor on which turtle will draw
 
 public:
@@ -43,6 +40,10 @@ public:
 	                      //     as well as initialization of other data members
 	void processTurtleMoves( const int commands[]);  // will process
 	                   // the commands contained in array "commands"	
+	void displayFloor() const;  // will display floor on the screen
+	int move(Directions dir, int comdsArr[], int comdsSize);
+	void turnLeft(Directions dir);
+	void turnRight(Directions dir);
 };
 
 

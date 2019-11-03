@@ -16,6 +16,8 @@ TurtleGraphics::TurtleGraphics(void) : m_Floor()
 
 void TurtleGraphics::processTurtleMoves(const int commands[])
 {
+
+	int sentinel = 0;
 	cout << "Processing commands" << endl;
 	//5,5,4,5,9,2 => move, by five, turn left, move, by 9, pen down
 	/*
@@ -27,49 +29,101 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 		6 - print array;
 		9 - exit;
 	*/
-	int comds[] = { 5,5,4,5,9,2 };
+	int comds[] = { 5,5,4,5,9,2,5,12,6,9 };
 	int s = size(comds);
-	
-	for(int i = 0; i < s; i++)
+
+	while (sentinel != 9)
 	{
-		switch (comds[i])
+		for (int i = 0; i < s; i++)
 		{
+			switch (comds[i])
+			{
 			case 1:
-				penState = 1;
+				currentPenState = false;
 				cout << "Pen is up\n";
 				break;
 			case 2:
-				penState = 2;
+				currentPenState = true;
 				cout << "Pen is down\n";
 				break;
 			case 3:
-				currentDirection = 1; //turning right
 				cout << "Turning right\n";
+				turnRight(currentDirection);
 				break;
 			case 4:
-				currentDirection = 0; //turning left
 				cout << "Turning left\n";
+				turnLeft(currentDirection);
 				break;
 			case 5:
+				//consider passing number of elements in comds array;
+				move(currentDirection, comds, 11); //TODO: pass a real size of the comds array
 				cout << "Moving cursor by 9\n";
-				xAxis = 5;
-				yAxis = 10;
-				m_Floor[xAxis][yAxis] = false;
-				m_Floor[6][yAxis] = false;
-				m_Floor[7][yAxis] = false;
-				m_Floor[8][yAxis] = false;
-				m_Floor[8][11] = false;
-				m_Floor[8][12] = false;
-				m_Floor[8][13] = false;
-
 				break;
+			case 6:
+				displayFloor();
+				break;
+			case 9:
+				sentinel = 9;
+				break;
+			}
 		}
 	}
+}
 
+int TurtleGraphics::move(Directions currDir, int comds[], int comdsSize) 
+{
+	int x = 0;
+	cout << "Moving\n";
 
-	displayFloor();
+	if (currentDirection == 1) {
+		xAxis = comds[comdsSize + 1];
+	}
+	if (currentDirection == 0) {
+		yAxis = comds[comdsSize + 1];
+	}
 
+	return x;
+}
 
+void TurtleGraphics::turnLeft(Directions currentDirection)
+{
+	cout << "Turning Left\n";
+
+	switch (currentDirection)
+	{
+	case SOUTH:
+		currentDirection = EAST;
+		break;
+	case WEST:
+		currentDirection = SOUTH;
+		break;
+	case NORTH:
+		currentDirection = WEST;
+		break;
+	case EAST:
+		currentDirection = NORTH;
+		break;
+	}
+}
+
+void TurtleGraphics::turnRight(Directions currentDirection)
+{
+	cout << "Turning Right\n";
+	switch (currentDirection)
+	{
+	case NORTH:
+		currentDirection = EAST;
+		break;
+	case EAST:
+		currentDirection = SOUTH;
+		break;
+	case SOUTH:
+		currentDirection = EAST;
+		break;
+	case WEST:
+		currentDirection = NORTH;
+		break;
+	}
 }
 
 void TurtleGraphics::displayFloor() const 
