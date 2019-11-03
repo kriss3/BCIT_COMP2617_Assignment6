@@ -41,7 +41,7 @@ public:
 	void processTurtleMoves( const int commands[]);  // will process
 	                   // the commands contained in array "commands"	
 	void displayFloor() const;  // will display floor on the screen
-	int move(Directions dir, int comdsArr[], int comdsSize);
+	int move(int valueToMoveBy, Directions dir, bool currentPenState, bool theGrid[][NCOLS], int comdsArr[], int comdsSize);
 	void turnLeft(Directions dir);
 	void turnRight(Directions dir);
 };

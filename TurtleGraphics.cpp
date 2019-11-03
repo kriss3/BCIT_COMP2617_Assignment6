@@ -5,13 +5,14 @@ using namespace std;
 
 TurtleGraphics::TurtleGraphics(void) : m_Floor()
 {
-	for (size_t i = 0; i < NROWS; i++)
+	bool m_Floor[NROWS][NCOLS] = { {true},{true} };
+	/*for (size_t i = 0; i < NROWS; i++)
 	{
 		for (size_t j = 0; j < NCOLS; j++)
 		{
 			m_Floor[i][j] = true;
 		}
-	}
+	}*/
 }
 
 void TurtleGraphics::processTurtleMoves(const int commands[])
@@ -56,7 +57,7 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 				break;
 			case 5:
 				//consider passing number of elements in comds array;
-				move(currentDirection, comds, 11); //TODO: pass a real size of the comds array
+				move(comds[i+1], currentDirection, currentPenState, m_Floor, comds, 11); //TODO: pass a real size of the comds array
 				cout << "Moving cursor by 9\n";
 				break;
 			case 6:
@@ -70,10 +71,25 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 	}
 }
 
-int TurtleGraphics::move(Directions currDir, int comds[], int comdsSize) 
+int TurtleGraphics::move(int valToMoveBy, Directions currDir, bool currPenState, bool theGrid[][70], int comds[], int comdsSize) 
 {
+	/*
+		move funk nees: 
+			grid NROWS x NCOLS;
+			comds array;
+			value to move by (this is 5 so we alreay know we are moving);
+			status of the pen;
+	*/
+
 	int x = 0;
 	cout << "Moving\n";
+
+	for (int i = 0; i < comdsSize; i++)
+	{
+
+	}
+
+
 
 	if (currentDirection == 1) {
 		xAxis = comds[comdsSize + 1];
