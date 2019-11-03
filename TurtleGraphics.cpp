@@ -30,7 +30,8 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 		6 - print array;
 		9 - exit;
 	*/
-	int comds[] = { 5,3,4,5,3,2,5,12,6,9 };
+	//int comds[] = { 5,3,4,5,3,2,5,5,4,5,6,6,9 };
+	int comds[] = { 5,3,2,4,5,4,3,5,3,4,5,10,6,9 };
 	int s = size(comds);
 
 	while (sentinel != 9)
@@ -57,8 +58,9 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 				break;
 			case 5:
 				//consider passing number of elements in comds array;
-				move(comds[i + 1], &currentDirection, currentPenState, m_Floor, comds, sizeof(comds));
+				move(comds[i+1], &currentDirection, currentPenState, m_Floor, comds, size(comds));
 				cout << "Moving cursor by 9\n";
+				i++;
 				break;
 			case 6:
 				displayFloor();
@@ -71,7 +73,7 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 	}
 }
 
-int TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenState, bool theGrid[][TurtleGraphics::NCOLS], int comds[], int comdsSize) 
+void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenState, bool theGrid[][TurtleGraphics::NCOLS], int comds[], int comdsSize) 
 {
 	/*
 		move funk nees: 
@@ -90,9 +92,7 @@ int TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenState
 
 	*/
 
-
 	int x = valToMoveBy;
-
 	cout << "Moving\n";
 	//first, based on the direction make a move;
 	switch (*currDir)
@@ -101,54 +101,72 @@ int TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenState
 		//traverse the grid moving south;
 		if (currPenState)
 		{
-			theGrid[x][col] = false;
-			row = x;
+			for (int i=0; i < valToMoveBy; i++)
+			{
+				theGrid[row][col] = false;
+				row++;
+			}
 		}
-		else 
+		else
 		{
-			theGrid[x][col] = true;
-			row = x;
+			for (int i = 0; i < valToMoveBy; i++)
+			{
+				row++;
+			}
 		}
 		break;
 	case WEST:
 		if (currPenState)
 		{
-			theGrid[row][x] = false;
-			col = x;
+			for (int i = 0; i < valToMoveBy; i++)
+			{
+				theGrid[row][col] = false;
+				col++;
+			}
 		}
 		else
 		{
-			theGrid[row][x] = true;
-			col = x;
+			for (int i = 0; i < valToMoveBy; i++)
+			{
+				col++;
+			}
 		}
 		break;
 	case NORTH:
 		if (currPenState)
 		{
-			theGrid[x][col] = false;
-			row = x;
+			for (int i = 0; i < valToMoveBy; i++)
+			{
+				theGrid[row][col] = false;
+				row++;
+			}
 		}
 		else
 		{
-			theGrid[x][col] = true;
-			row = x;
+			for (int i = 0; i < valToMoveBy; i++)
+			{
+				row++;
+			}
 		}
 		break;
 	case EAST:
 		if (currPenState)
 		{
-			theGrid[row][x] = false;
-			col = x;
+			for (int i = 0; i < valToMoveBy; i++)
+			{
+				theGrid[row][col] = false;
+				col++;
+			}
 		}
 		else
 		{
-			theGrid[row][x] = true;
-			col = x;
+			for (int i = 0; i <= valToMoveBy; i++)
+			{
+				col++;
+			}
 		}
 		break;
 	}
-
-	return x;
 }
 
 void TurtleGraphics::turnLeft(Directions *currentDirection)
@@ -184,7 +202,7 @@ void TurtleGraphics::turnRight(Directions *currentDirection)
 		*currentDirection = SOUTH;
 		break;
 	case SOUTH:
-		*currentDirection = EAST;
+		*currentDirection = WEST;
 		break;
 	case WEST:
 		*currentDirection = NORTH;
