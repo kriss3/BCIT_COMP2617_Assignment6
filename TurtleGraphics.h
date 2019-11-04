@@ -5,6 +5,7 @@
 // Date: June 5, 2019
 
 #pragma once
+#include<array>
 
 // Define some enum types that will be used in solution.
 
@@ -33,18 +34,17 @@ private:
 	
 	int row = STARTING_ROW; //initial xAxis position x=0;
 	int col = STARTING_COL; // initial yAxis position y=0;
-	bool m_Floor [NROWS][NCOLS];   // floor on which turtle will draw
+	std::array <std::array <bool, NCOLS>, NROWS> m_Floor;
+	//bool m_Floor [NROWS][NCOLS];   // floor on which turtle will draw
 
 public:
+	const static int ARRAY_SIZE = 250;
 	TurtleGraphics(void); //ctor will init. floor to all "true" values, 
 	                      //     as well as initialization of other data members
-	void processTurtleMoves( const int commands[]);  // will process
+	void processTurtleMoves(const std::array< int, ARRAY_SIZE>&);  // will process
 	                   // the commands contained in array "commands"	
 	void displayFloor() const;  // will display floor on the screen
-	void move(int valueToMoveBy, Directions *dir, bool currentPenState, bool theGrid[][NCOLS], int comdsArr[], int comdsSize);
+	void move(size_t valueToMoveBy, Directions *dir, bool currentPenState, std::array <std::array <bool, NCOLS>, NROWS> theGrid);
 	void turnLeft(Directions *dir);
 	void turnRight(Directions *dir);
 };
-
-
-

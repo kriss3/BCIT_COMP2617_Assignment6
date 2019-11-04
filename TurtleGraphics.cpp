@@ -5,7 +5,6 @@ using namespace std;
 
 TurtleGraphics::TurtleGraphics(void) : m_Floor()
 {
-	//bool m_Floor[NROWS][NCOLS] = { {true},{true} };
 	for (size_t i = 0; i < NROWS; i++)
 	{
 		for (size_t j = 0; j < NCOLS; j++)
@@ -15,87 +14,42 @@ TurtleGraphics::TurtleGraphics(void) : m_Floor()
 	}
 }
 
-void TurtleGraphics::processTurtleMoves(const int commands[])
+//Process comands and 2d array to flip false field to true to create a pattern;
+void TurtleGraphics::processTurtleMoves(const array<int, TurtleGraphics::ARRAY_SIZE> & comds)
 {
-
 	int sentinel = 0;
-	cout << "Processing commands" << endl;
-	//5,5,4,5,9,2 => move, by five, turn left, move, by 9, pen down
-	/*
-		1 - pen up
-		2 - pen down
-		3 - turn right
-		4 - turn left
-		5,10 move by 10
-		6 - print array;
-		9 - exit;
-	*/
-	//int comds[] = { 5,3,4,5,3,2,5,5,4,5,6,6,9 };
-	//int comds[] = { 5,3,2,4,5,4,3,5,3,4,5,10,6,9 };
-	//int comds[] = { 1,5,100,2,4,5,100,4,5,100,4,5,100,4,5,100,4,5,100 };
-	//int comds[] = {5,100,2,4,5,100,6,9};
 
-	//int comds[] = {2,5,20,4,5,60,4,5,20,4,5,60,1,6,9};
-
-	int comds[] = { 5,5,4,5,9,2,    // go to start of first letter and put pen down
-
-					 // B
-					 5,12, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
-					 1,3,5,12,3,5,5, 5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
-
-					 1,5,5,3,5,22,2, // go to start of next letter and put pen down
-
-					 // O
-					 5,10, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,7, 1,3,5,1,4,2,5,1,
-					 1,3,5,1,2,5,10, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,7, 1,3,5,1,4,2,5,1,
-
-					 1,3,5,19,2,     // go to start of next letter and put pen down
-
-					 // B
-					 5,12, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
-					 1,3,5,12,3,5,5, 5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
-
-		// Test program bound checking and add border in the process
-
-		//   Uncomment next line when ready to test bound checking
-		//1,5,100,2,4,5,100,4,5,100,4,5,100,4,5,100,4,5,100,
-
-		1,6,9 }; // finish off
-
-
-	int s = size(comds);
-
-	while (sentinel != 9)
+	while (sentinel != END_OF_DATA)
 	{
-		for (int i = 0; i <= s; i++)
+		for (size_t i = 0; i < comds.size(); i++)
 		{
-			switch (comds[i]) //TODO: make sure to swtich with comds array to Comands enum;
+			switch (comds[i]) //TODO: make sure to switch with comds array to Comands enum;
 			{
-			case 1:
+			case PEN_UP:
 				currentPenState = false;
 				//cout << "Pen is up\n";
 				break;
-			case 2:
+			case PEN_DWN:
 				currentPenState = true;
 				//cout << "Pen is down\n";
 				break;
-			case 3:
+			case TURN_RIGHT:
 				//cout << "Turning right\n";
 				turnRight(&currentDirection);
 				break;
-			case 4:
+			case TURN_LEFT:
 				//cout << "Turning left\n";
 				turnLeft(&currentDirection);
 				break;
-			case 5:
+			case MOVE:
 				//consider passing number of elements in comds array;
-				move(comds[i+1], &currentDirection, currentPenState, m_Floor, comds, s);
+				move(comds[i+1], &currentDirection, currentPenState, m_Floor);
 				i++;
 				break;
-			case 6:
+			case DISPLAY:
 				displayFloor();
 				break;
-			case 9:
+			case END_OF_DATA:
 				sentinel = 9;
 				break;
 			}
@@ -103,7 +57,7 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 	}
 }
 
-void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenState, bool theGrid[][TurtleGraphics::NCOLS], int comds[], int comdsSize) 
+void TurtleGraphics::move(size_t valToMoveBy, Directions *currDir, bool currPenState, array <array <bool, NCOLS>, NROWS> theGrid)
 {
 	/*
 		move funk nees: 
@@ -113,15 +67,14 @@ void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenStat
 			status of the pen;
 	*/
 
-	int x = valToMoveBy;
-
-
 	switch (*currDir)
 	{
 	case SOUTH:
 		//traverse the grid moving south;
-		for (int i=0; i < x; i++)
+		for (size_t i=0; i < valToMoveBy; i++)
 		{
+			if (row >= (NROWS - 1))
+				break;
 			if (currentPenState)
 			{
 				theGrid[row][col] = false;
@@ -134,8 +87,10 @@ void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenStat
 		}
 		break;
 	case WEST:
-		for (int i = 0; i < x; i++)
+		for (size_t i = 0; i < valToMoveBy; i++)
 		{
+			if (col <= 0)
+				break;
 			if (currentPenState)
 			{
 				theGrid[row][col] = false;
@@ -148,8 +103,10 @@ void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenStat
 		}
 		break;
 	case NORTH:
-		for (int i = 0; i < x; i++)
+		for (size_t i = 0; i < valToMoveBy; i++)
 		{
+			if (row <=0)
+				break;
 			if (currentPenState)
 			{
 				theGrid[row][col] = false;
@@ -162,8 +119,10 @@ void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenStat
 		}
 		break;
 	case EAST:
-		for (int i = 0; i < x; i++)
+		for (size_t i = 0; i < valToMoveBy; i++)
 		{
+			if (col >= (NCOLS - 1))
+				break;
 			if (currentPenState)
 			{
 				theGrid[row][col] = false;
@@ -176,6 +135,7 @@ void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenStat
 		}
 		break;
 	}
+	m_Floor = theGrid;
 }
 
 void TurtleGraphics::turnLeft(Directions *currentDirection)
@@ -218,8 +178,7 @@ void TurtleGraphics::turnRight(Directions *currentDirection)
 
 void TurtleGraphics::displayFloor() const 
 {
-	cout << "Displaying all ateriks.\n\n\n" << endl;
-	
+
 	for (int i = 0; i < NROWS; i++)
 	{
 		for (int j = 0; j < NCOLS; j++)
@@ -231,7 +190,7 @@ void TurtleGraphics::displayFloor() const
 			else
 			{
 				cout << " ";
-			}
+			}  //end of inner loop
 		}
 		cout << endl;
 	}
