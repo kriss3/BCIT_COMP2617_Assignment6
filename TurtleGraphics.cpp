@@ -31,35 +31,65 @@ void TurtleGraphics::processTurtleMoves(const int commands[])
 		9 - exit;
 	*/
 	//int comds[] = { 5,3,4,5,3,2,5,5,4,5,6,6,9 };
-	int comds[] = { 5,3,2,4,5,4,3,5,3,4,5,10,6,9 };
+	//int comds[] = { 5,3,2,4,5,4,3,5,3,4,5,10,6,9 };
+	//int comds[] = { 1,5,100,2,4,5,100,4,5,100,4,5,100,4,5,100,4,5,100 };
+	//int comds[] = {5,100,2,4,5,100,6,9};
+
+	//int comds[] = {2,5,20,4,5,60,4,5,20,4,5,60,1,6,9};
+
+	int comds[] = { 5,5,4,5,9,2,    // go to start of first letter and put pen down
+
+					 // B
+					 5,12, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
+					 1,3,5,12,3,5,5, 5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
+
+					 1,5,5,3,5,22,2, // go to start of next letter and put pen down
+
+					 // O
+					 5,10, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,7, 1,3,5,1,4,2,5,1,
+					 1,3,5,1,2,5,10, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,7, 1,3,5,1,4,2,5,1,
+
+					 1,3,5,19,2,     // go to start of next letter and put pen down
+
+					 // B
+					 5,12, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
+					 1,3,5,12,3,5,5, 5,1,4,2,5,1, 1,3,5,1,2,5,2, 1,3,5,1,4,2,5,1, 1,3,5,1,2,5,11, 3,5,5,
+
+		// Test program bound checking and add border in the process
+
+		//   Uncomment next line when ready to test bound checking
+		//1,5,100,2,4,5,100,4,5,100,4,5,100,4,5,100,4,5,100,
+
+		1,6,9 }; // finish off
+
+
 	int s = size(comds);
 
 	while (sentinel != 9)
 	{
-		for (int i = 0; i < s; i++)
+		for (int i = 0; i <= s; i++)
 		{
 			switch (comds[i]) //TODO: make sure to swtich with comds array to Comands enum;
 			{
 			case 1:
 				currentPenState = false;
-				cout << "Pen is up\n";
+				//cout << "Pen is up\n";
 				break;
 			case 2:
 				currentPenState = true;
-				cout << "Pen is down\n";
+				//cout << "Pen is down\n";
 				break;
 			case 3:
-				cout << "Turning right\n";
+				//cout << "Turning right\n";
 				turnRight(&currentDirection);
 				break;
 			case 4:
-				cout << "Turning left\n";
+				//cout << "Turning left\n";
 				turnLeft(&currentDirection);
 				break;
 			case 5:
 				//consider passing number of elements in comds array;
-				move(comds[i+1], &currentDirection, currentPenState, m_Floor, comds, size(comds));
-				cout << "Moving cursor by 9\n";
+				move(comds[i+1], &currentDirection, currentPenState, m_Floor, comds, s);
 				i++;
 				break;
 			case 6:
@@ -83,84 +113,63 @@ void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenStat
 			status of the pen;
 	*/
 
-	/*
-							Rows       Columns
-		I have a grid  22     x   70	
-		All values in the grid are populated with value TRUE;
-
-
-
-	*/
-
 	int x = valToMoveBy;
-	cout << "Moving\n";
-	//first, based on the direction make a move;
+
+
 	switch (*currDir)
 	{
 	case SOUTH:
 		//traverse the grid moving south;
-		if (currPenState)
+		for (int i=0; i < x; i++)
 		{
-			for (int i=0; i < valToMoveBy; i++)
+			if (currentPenState)
 			{
 				theGrid[row][col] = false;
 				row++;
 			}
-		}
-		else
-		{
-			for (int i = 0; i < valToMoveBy; i++)
+			else 
 			{
 				row++;
 			}
 		}
 		break;
 	case WEST:
-		if (currPenState)
+		for (int i = 0; i < x; i++)
 		{
-			for (int i = 0; i < valToMoveBy; i++)
+			if (currentPenState)
 			{
 				theGrid[row][col] = false;
-				col++;
+				col--;
 			}
-		}
-		else
-		{
-			for (int i = 0; i < valToMoveBy; i++)
+			else
 			{
-				col++;
+				col--;
 			}
 		}
 		break;
 	case NORTH:
-		if (currPenState)
+		for (int i = 0; i < x; i++)
 		{
-			for (int i = 0; i < valToMoveBy; i++)
+			if (currentPenState)
 			{
 				theGrid[row][col] = false;
-				row++;
+				row--;
 			}
-		}
-		else
-		{
-			for (int i = 0; i < valToMoveBy; i++)
+			else
 			{
-				row++;
+				row--;
 			}
 		}
 		break;
 	case EAST:
-		if (currPenState)
+		for (int i = 0; i < x; i++)
 		{
-			for (int i = 0; i < valToMoveBy; i++)
+			if (currentPenState)
 			{
 				theGrid[row][col] = false;
 				col++;
 			}
-		}
-		else
-		{
-			for (int i = 0; i <= valToMoveBy; i++)
+			else
 			{
 				col++;
 			}
@@ -171,8 +180,6 @@ void TurtleGraphics::move(int valToMoveBy, Directions *currDir, bool currPenStat
 
 void TurtleGraphics::turnLeft(Directions *currentDirection)
 {
-	cout << "Turning Left\n";
-
 	switch (*currentDirection)
 	{
 	case SOUTH:
@@ -192,7 +199,6 @@ void TurtleGraphics::turnLeft(Directions *currentDirection)
 
 void TurtleGraphics::turnRight(Directions *currentDirection)
 {
-	cout << "Turning Right\n";
 	switch (*currentDirection)
 	{
 	case NORTH:
@@ -212,11 +218,11 @@ void TurtleGraphics::turnRight(Directions *currentDirection)
 
 void TurtleGraphics::displayFloor() const 
 {
-	cout << "Displaying all aterix" << endl;
+	cout << "Displaying all ateriks.\n\n\n" << endl;
 	
-	for (size_t i = 0; i < NROWS; i++)
+	for (int i = 0; i < NROWS; i++)
 	{
-		for (size_t j = 0; j < NCOLS; j++)
+		for (int j = 0; j < NCOLS; j++)
 		{
 			if (m_Floor[i][j] == false)
 			{
