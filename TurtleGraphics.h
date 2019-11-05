@@ -44,7 +44,10 @@ public:
 	void processTurtleMoves(const std::array< int, ARRAY_SIZE>&);  // will process
 	                   // the commands contained in array "commands"	
 	void displayFloor() const;  // will display floor on the screen
+	//function to process movement of the Turtle;
 	void move(size_t valueToMoveBy, Directions *dir, bool currentPenState, std::array <std::array <bool, NCOLS>, NROWS> theGrid);
+	//function to process turning left and updating current direction status;
 	void turnLeft(Directions *dir);
+	//function to process turning right and updating current direction status;
 	void turnRight(Directions *dir);
 };
